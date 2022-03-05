@@ -3,6 +3,7 @@
    import MeetupGrid from './Meetups/MeetupGrid.svelte';
    import TextInput from './UI/TextInput.svelte';
    import Button from './UI/Button.svelte';
+   import Modal from './Modal.svelte';
 
    let title="";
    let subtitle="";
@@ -10,6 +11,7 @@
    let email="";
    let description="";
    let imageUrl="";
+   let showForm;
 
    let meetups = [
      {
@@ -80,6 +82,11 @@
 <Header />
 
 <main>
+  <button on:click={() => (showForm = true)}>Add Meetup</button>
+  <MeetupGrid {meetups}/>
+</main>
+{#if showForm}
+<Modal on:close="{() => (showForm = false)}">
   <form on:submit|preventDefault="{addMeetup}">
     <TextInput id="title" label="Title" type="text" value={title} on:input="{event => (title = event.target.value)}" />
     <TextInput id="subtitle" label="Subtitle" type="text" value={subtitle} on:input="{event => (subtitle = event.target.value)}" /> 
@@ -89,8 +96,9 @@
     <TextInput id="description" label="Description" controlType="textarea" value={description} on:input="{event => (description = event.target.value)}" />     
     <Button type="submit" caption="Save"/>
   </form>
-  <MeetupGrid {meetups}/>
-</main>
+  <button slot="footer" on:click="{() => (showForm = false)}">Confirm Details</button>
+</Modal>
+{/if}
 
 
 
